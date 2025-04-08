@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt Reimbursement Form</title>
+</head>
+<body>
+    <h2>Reimbursement Form</h2>
+
+    <form id="reimbursementForm">
+        <label>Date:</label><br>
+        <input type="date" name="date" required><br><br>
+
+        <label>Amount:</label><br>
+        <input type="number" name="amount" required><br><br>
+
+        <label>Description:</label><br>
+        <textarea name="description" rows="4" cols="50" required></textarea><br><br>
+
+        <label>Upload Receipt:</label><br>
+        <input type="file" name="file" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <p id="response"></p>
+
+    <script>
+    const form = document.getElementById('reimbursementForm');
+    const responseBox = document.getElementById('response');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch('/api/reimbursements', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await res.json();
+        responseBox.innerText = "Submission successful! ID: " + data.id;
+      } catch (err) {
+        console.error(err);
+        responseBox.innerText = "Error submitting the form.";
+      }
+    });
+    </script>
+</body>
+</html>
